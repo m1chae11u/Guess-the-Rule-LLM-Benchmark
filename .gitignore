@@ -8,3 +8,5 @@ saved_games*
 backend.egg-info
 *keys.json
 .history
+
+./frontend/node_modules/
