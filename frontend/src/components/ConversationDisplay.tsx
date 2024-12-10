@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Copy, RotateCcw } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { useState } from "react";
 import { GameDetailsPanel } from "./game/GameDetailsPanel";
 import { GameStatsPanel } from "./game/GameStatsPanel";
 import { ChatMessage } from "./game/ChatMessage";
@@ -19,7 +20,6 @@ interface GameDetails {
   startTime: Date;
   status: "ongoing" | "won" | "lost";
   turnsTaken: number;
-  gameId: string;
 }
 
 interface ConversationDisplayProps {
@@ -28,7 +28,6 @@ interface ConversationDisplayProps {
   onReset: () => void;
   isUserPlaying: boolean;
   gameDetails: GameDetails;
-  onSendMessage: (message: string) => void;
 }
 
 export const ConversationDisplay = ({ 
@@ -36,13 +35,13 @@ export const ConversationDisplay = ({
   isLoading, 
   onReset,
   isUserPlaying,
-  gameDetails,
-  onSendMessage
+  gameDetails
 }: ConversationDisplayProps) => {
   const { toast } = useToast();
+  const [localMessages, setLocalMessages] = useState<Message[]>(messages);
 
   const copyConversation = () => {
-    const text = messages
+    const text = localMessages
       .map((msg) => `${msg.sender}: ${msg.content}`)
       .join("\n\n");
     navigator.clipboard.writeText(text);
@@ -52,19 +51,31 @@ export const ConversationDisplay = ({
     });
   };
 
+  const handleSendMessage = (message: string) => {
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      content: message,
+      sender: "user"
+    };
+    
+    const systemMessage: Message = {
+      id: (Date.now() + 1).toString(),
+      content: "I understand your guess. Let me evaluate that...",
+      sender: "system"
+    };
+    
+    setLocalMessages(prev => [...prev, userMessage, systemMessage]);
+  };
+
   return (
     <div className="w-full max-w-4xl mx-auto space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <GameDetailsPanel details={gameDetails} />
-        <GameStatsPanel 
-          startTime={gameDetails.startTime} 
-          turnsTaken={gameDetails.turnsTaken} 
-          gameStatus={gameDetails.status}
-        />
+        <GameStatsPanel startTime={gameDetails.startTime} turnsTaken={gameDetails.turnsTaken} />
       </div>
 
-      <div className="h-[500px] overflow-y-auto p-6 glass-panel space-y-4 hover:shadow-lg transition-shadow duration-300">
-        {messages.map((message, index) => (
+      <div className="h-[500px] overflow-y-auto p-6 glass-panel space-y-4 hover:shadow-lg transition-shadow duration-300 bg-gray-100/80 backdrop-blur-md border border-white/20">
+        {localMessages.map((message, index) => (
           <ChatMessage
             key={message.id}
             content={message.content}
@@ -73,7 +84,7 @@ export const ConversationDisplay = ({
           />
         ))}
         {isLoading && (
-          <div className="message-bubble mr-auto" data-sender="system">
+          <div className="message-bubble mr-auto">
             <div className="loading-dots">
               <div></div>
               <div></div>
@@ -84,7 +95,7 @@ export const ConversationDisplay = ({
       </div>
 
       {isUserPlaying && (
-        <ChatInput onSendMessage={onSendMessage} />
+        <ChatInput onSendMessage={handleSendMessage} />
       )}
 
       <div className="flex justify-between gap-4">

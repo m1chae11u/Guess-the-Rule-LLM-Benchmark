@@ -37,19 +37,11 @@
 }
 
 .glass-panel {
-  @apply bg-opacity-40 backdrop-blur-sm border border-white border-opacity-20 rounded-2xl;
+  @apply bg-white bg-opacity-40 backdrop-blur-sm border border-white border-opacity-20 rounded-2xl;
 }
 
 .message-bubble {
-  @apply animate-fade-in p-4 max-w-[80%] shadow-sm rounded-2xl;
-}
-
-.message-bubble[data-sender="user"] {
-  @apply bg-[#9b87f5] text-white rounded-tr-none;
-}
-
-.message-bubble[data-sender="system"] {
-  @apply bg-gray-200/90 rounded-tl-none;
+  @apply animate-fade-in glass-panel p-4 max-w-[80%] shadow-sm;
 }
 
 .loading-dots {

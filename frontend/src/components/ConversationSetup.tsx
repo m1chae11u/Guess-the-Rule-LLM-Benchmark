@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Input } from "@/components/ui/input";
 import { Info } from "lucide-react";
 import {
   Tooltip,
@@ -20,7 +19,7 @@ const PLAYER_OPTIONS = [
 ];
 
 const DOMAIN_OPTIONS = [
-  { id: "natural_language", name: "Natural Language" },
+  { id: "natural-language", name: "Natural Language" },
   { id: "lexical", name: "Lexical" },
   { id: "math", name: "Math" },
 ];
@@ -32,26 +31,18 @@ const DIFFICULTY_OPTIONS = [
 ];
 
 interface ConversationSetupProps {
-  onStart: (domain: string, difficulty: string, player: string, initialExamples: number, isDynamic: boolean) => void;
+  onStart: (domain: string, difficulty: string, player: string, isDynamic: boolean) => void;
 }
 
 export const ConversationSetup = ({ onStart }: ConversationSetupProps) => {
   const [domain, setDomain] = useState("");
   const [difficulty, setDifficulty] = useState("");
   const [selectedPlayer, setSelectedPlayer] = useState("");
-  const [initialExamples, setInitialExamples] = useState("3");
   const [isDynamic, setIsDynamic] = useState(false);
 
   const handleStart = () => {
     if (domain && difficulty && selectedPlayer) {
-      onStart(domain, difficulty, selectedPlayer, parseInt(initialExamples), isDynamic);
-    }
-  };
-
-  const handleExamplesChange = (value: string) => {
-    const num = parseInt(value);
-    if (!isNaN(num) && num >= 1 && num <= 5) {
-      setInitialExamples(value);
+      onStart(domain, difficulty, selectedPlayer, isDynamic);
     }
   };
 
@@ -109,18 +100,6 @@ export const ConversationSetup = ({ onStart }: ConversationSetupProps) => {
             ))}
           </SelectContent>
         </Select>
-      </div>
-
-      <div className="space-y-2">
-        <label className="text-sm font-medium">Number of Initial Examples</label>
-        <Input
-          type="number"
-          min={1}
-          max={5}
-          value={initialExamples}
-          onChange={(e) => handleExamplesChange(e.target.value)}
-          className="bg-white/50 backdrop-blur-sm hover:bg-white/80 transition-all"
-        />
       </div>
 
       <div className="flex items-center justify-between">

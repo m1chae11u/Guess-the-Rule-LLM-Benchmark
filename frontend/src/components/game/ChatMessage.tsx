@@ -7,14 +7,15 @@ interface ChatMessageProps {
 export const ChatMessage = ({ content, sender, index }: ChatMessageProps) => {
   return (
     <div
-      className={`message-bubble ${sender === "user" ? "ml-auto" : "mr-auto"}`}
-      data-sender={sender}
+      className={`message-bubble ${
+        sender === "user" ? "ml-auto bg-primary/90 text-white" : "mr-auto bg-gray-200"
+      } animate-fade-in`}
       style={{ animationDelay: `${index * 0.1}s` }}
     >
-      <div className={`text-xs font-medium mb-1 ${sender === "user" ? "text-white/80" : "text-gray-500"}`}>
+      <div className="text-xs font-medium mb-1 text-muted-foreground">
         {sender}
       </div>
-      <div className="text-sm whitespace-pre-wrap">{content}</div>
+      <div className="text-sm">{content}</div>
     </div>
   );
 };

@@ -7,7 +7,6 @@ interface GameDetails {
   startTime: Date;
   status: "ongoing" | "won" | "lost";
   turnsTaken: number;
-  gameId: string;
 }
 
 interface GameDetailsPanelProps {
@@ -32,8 +31,6 @@ export const GameDetailsPanel = ({ details }: GameDetailsPanelProps) => {
     <div className="glass-panel p-4 space-y-2 hover:shadow-lg transition-shadow duration-300 bg-gray-100/80 backdrop-blur-md border border-white/20">
       <h3 className="font-semibold text-lg mb-2 text-primary">Game Details</h3>
       <div className="grid grid-cols-2 gap-2 text-sm">
-        <span className="text-muted-foreground">Game ID:</span>
-        <span className="font-medium font-mono text-xs">{details.gameId}</span>
         <span className="text-muted-foreground">Domain:</span>
         <span className="font-medium">{details.domain}</span>
         <span className="text-muted-foreground">Difficulty:</span>
